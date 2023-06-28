@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -8,8 +6,8 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer rbSprite;
     private Animator animator;
 
-    private float moveSpeen = 7f;
-    private float jumpForce = 14f;
+    public float moveSpeen = 7f;
+    public float jumpForce = 14f;
 
     private void Start()
     {
@@ -28,10 +26,10 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, jumpForce);
         }
 
-        UpdateUpdate(dirX);
+        UpdateAnimation(dirX);
     }
 
-    private void UpdateUpdate(float dirX)
+    private void UpdateAnimation(float dirX)
     {
         rbSprite.flipX = dirX < 0;
         animator.SetBool("running", dirX != 0);

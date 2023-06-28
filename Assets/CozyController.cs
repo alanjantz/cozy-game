@@ -1,10 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class CozyController : MonoBehaviour
 {
-    private List<Ground> grounds;
+    private const int SHOWING_CELLS = 10;
+    private const int STARTING_GRASS_CELL = 0;
+
+    private readonly List<Ground> grounds = new();
+    private readonly List<Wall> walls = new();
 
     public Tilemap groundMap;
     public Tilemap grassMap;
@@ -12,61 +17,78 @@ public class CozyController : MonoBehaviour
     public Tilemap treesMap;
     public Tilemap scenaryMap;
 
-    void Start()
+    private void Start()
     {
         groundMap.GetComponent<TilemapCollider2D>().usedByComposite = true;
         InitializeGround();
+        InitializeWall();
+
     }
 
-    void Update()
+    private void Update()
     {
+        var userDirection = Input.GetAxisRaw("Horizontal");
 
+        if (userDirection > 0 /* right */)
+        {
+            var cameraPosition = Camera.main.transform.position;
+            var upcomingTilePosition = (int)cameraPosition.x + SHOWING_CELLS;
+            if (!grounds.Any(tile => tile.Position.x == upcomingTilePosition))
+            {
+                var lastGround = grounds.FirstOrDefault(tile => tile.Position.x == upcomingTilePosition - 1);
+                var newGround = new Ground(new(upcomingTilePosition, STARTING_GRASS_CELL), lastGround.GetNextGrassType());
+                grounds.Add(newGround);
+                InsertGroundTile(newGround);
+            }
+        }
+        else if (userDirection < 0 /* left */)
+        {
+            var cameraPosition = Camera.main.transform.position;
+            var upcomingTilePosition = (int)cameraPosition.x - SHOWING_CELLS;
+            if (!grounds.Any(tile => tile.Position.x == upcomingTilePosition))
+            {
+                var lastGround = grounds.FirstOrDefault(tile => tile.Position.x == upcomingTilePosition + 1);
+                var newGround = new Ground(new(upcomingTilePosition, STARTING_GRASS_CELL), lastGround.GetPreviousGrassType());
+                grounds.Add(newGround);
+                InsertGroundTile(newGround);
+            }
+        }
     }
 
     private void InitializeGround()
     {
-        const int SHOWING_CELLS = 10;
-        const int STARTING_GRASS_CELL = 0;
-        grounds = new();
-
-        for (int cell = SHOWING_CELLS * -1, lastTile = 0; cell < SHOWING_CELLS; cell++)
+        var lastGrassType = GrassType.First;
+        for (int cell = SHOWING_CELLS * -1; cell < SHOWING_CELLS; cell++)
         {
-            grounds.Add(new(new(cell, STARTING_GRASS_CELL), MainAssets.Instance.grassLeaves[lastTile]));
-
-            lastTile++;
-            if (lastTile == MainAssets.Instance.grassLeaves.Length)
-                lastTile = 0;
+            var ground = new Ground(new(cell, STARTING_GRASS_CELL), lastGrassType);
+            grounds.Add(ground);
+            lastGrassType = ground.GetNextGrassType();
         }
 
         foreach (var ground in grounds)
+            InsertGroundTile(ground);
+    }
+
+    private void InitializeWall()
+    {
+        const int WALL_HEIGHT = 1;
+        const int STARTING_WALL_CELL = 0;
+
+        for (int cell = SHOWING_CELLS * -1; cell < SHOWING_CELLS; cell++)
+            walls.Add(new(STARTING_WALL_CELL, cell, WALL_HEIGHT));
+
+        foreach (var wall in walls)
         {
-            grassMap.SetTile(ground.Position, ground.Tile);
-            foreach (var underground in ground.Underground)
-                groundMap.SetTile(underground.Key, underground.Value);
+            wallMap.SetTile(wall.TopPosition, MainAssets.GetWallBlockTop());
+            foreach (var blockPosition in wall.BlockPositions)
+                wallMap.SetTile(blockPosition, MainAssets.GetWallBlock());
         }
     }
 
-    private class Ground
+    private void InsertGroundTile(Ground ground)
     {
-        private const int GROUND_HEIGHT = 4;
-        private const int STARTING_GROUND_CELL = -1;
-
-        public Vector3Int Position { get; private set; }
-        public TileBase Tile { get; private set; }
-        public Dictionary<Vector3Int, TileBase> Underground { get; } = new();
-
-        public Ground(Vector3Int position, TileBase tile)
-        {
-            Position = position;
-            Tile = tile;
-
-            CreateUnderground();
-        }
-
-        private void CreateUnderground()
-        {
-            for (int i = 0, cellPosition = STARTING_GROUND_CELL; i < GROUND_HEIGHT; i++, cellPosition--)
-                Underground[new(Position.x, cellPosition)] = MainAssets.Instance.grassBlock;
-        }
+        grassMap.SetTile(ground.Position, MainAssets.GetGrassLeaf(ground.GrassType));
+        foreach (var underground in ground.Underground)
+            groundMap.SetTile(underground, MainAssets.GetGrassBlock());
     }
 }
