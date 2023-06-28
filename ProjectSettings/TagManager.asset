@@ -41,9 +41,18 @@ TagManager:
   - name: Background
     uniqueID: 917289727
     locked: 0
+  - name: Scenary
+    uniqueID: 3419462039
+    locked: 0
+  - name: Trees
+    uniqueID: 4265123753
+    locked: 0
+  - name: Wall
+    uniqueID: 1979573129
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Terrain
-    uniqueID: 3419462039
+  - name: Grass
+    uniqueID: 70383905
     locked: 0

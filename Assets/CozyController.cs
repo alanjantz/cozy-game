@@ -6,14 +6,15 @@ public class CozyController : MonoBehaviour
 {
     private List<Ground> grounds;
 
-    [SerializeField]
-    public Tilemap GroundMap;
-    [SerializeField]
-    public Tilemap GrassMap;
+    public Tilemap groundMap;
+    public Tilemap grassMap;
+    public Tilemap wallMap;
+    public Tilemap treesMap;
+    public Tilemap scenaryMap;
 
     void Start()
     {
-        GroundMap.GetComponent<TilemapCollider2D>().usedByComposite = true;
+        groundMap.GetComponent<TilemapCollider2D>().usedByComposite = true;
         InitializeGround();
     }
 
@@ -30,18 +31,18 @@ public class CozyController : MonoBehaviour
 
         for (int cell = SHOWING_CELLS * -1, lastTile = 0; cell < SHOWING_CELLS; cell++)
         {
-            grounds.Add(new(new(cell, STARTING_GRASS_CELL), MainAssets.Instance.GrassLeaves[lastTile]));
+            grounds.Add(new(new(cell, STARTING_GRASS_CELL), MainAssets.Instance.grassLeaves[lastTile]));
 
             lastTile++;
-            if (lastTile == MainAssets.Instance.GrassLeaves.Length)
+            if (lastTile == MainAssets.Instance.grassLeaves.Length)
                 lastTile = 0;
         }
 
         foreach (var ground in grounds)
         {
-            GrassMap.SetTile(ground.Position, ground.Tile);
+            grassMap.SetTile(ground.Position, ground.Tile);
             foreach (var underground in ground.Underground)
-                GroundMap.SetTile(underground.Key, underground.Value);
+                groundMap.SetTile(underground.Key, underground.Value);
         }
     }
 
@@ -65,7 +66,7 @@ public class CozyController : MonoBehaviour
         private void CreateUnderground()
         {
             for (int i = 0, cellPosition = STARTING_GROUND_CELL; i < GROUND_HEIGHT; i++, cellPosition--)
-                Underground[new(Position.x, cellPosition)] = MainAssets.Instance.GrassBlock;
+                Underground[new(Position.x, cellPosition)] = MainAssets.Instance.grassBlock;
         }
     }
 }

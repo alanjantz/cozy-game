@@ -5,10 +5,10 @@ public class MainAssets : MonoBehaviour
 {
     private static MainAssets _instance;
 
-    [SerializeField]
-    public Tile[] GrassLeaves;
-    [SerializeField]
-    public Tile GrassBlock;
+    public Tile[] grassLeaves;
+    public Tile grassBlock;
+    public Tile wallBlock;
+    public Tile wallBlockTop;
 
     public static MainAssets Instance => _instance;
 
