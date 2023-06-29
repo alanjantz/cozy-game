@@ -5,8 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class CozyController : MonoBehaviour
 {
-    private const int SHOWING_CELLS = 10;
-    private const int STARTING_GRASS_CELL = 0;
+    private const int SHOWING_CELLS = 30;
 
     private readonly List<Ground> grounds = new();
     private readonly List<Wall> walls = new();
@@ -22,35 +21,29 @@ public class CozyController : MonoBehaviour
         groundMap.GetComponent<TilemapCollider2D>().usedByComposite = true;
         InitializeGround();
         InitializeWall();
-
     }
 
     private void Update()
     {
-        var userDirection = Input.GetAxisRaw("Horizontal");
+        if (!InputUtils.IsIdle())
+        {
+            var cameraPosition = (int)Camera.main.transform.position.x;
+            var upcomingTilePosition = cameraPosition + SHOWING_CELLS;
+            var shouldInsertNewTile = false;
+            int positionAux = 1;
 
-        if (userDirection > 0 /* right */)
-        {
-            var cameraPosition = Camera.main.transform.position;
-            var upcomingTilePosition = (int)cameraPosition.x + SHOWING_CELLS;
-            if (!grounds.Any(tile => tile.Position.x == upcomingTilePosition))
+            if (InputUtils.IsMovingRight())
+                positionAux = -1;
+            else if (InputUtils.IsMovingLeft())
+                upcomingTilePosition = cameraPosition - SHOWING_CELLS;
+
+            shouldInsertNewTile = !grounds.Any(tile => tile.Position.x == upcomingTilePosition)
+                               && !walls.Any(tile => tile.TopPosition.x == upcomingTilePosition);
+
+            if (shouldInsertNewTile)
             {
-                var lastGround = grounds.FirstOrDefault(tile => tile.Position.x == upcomingTilePosition - 1);
-                var newGround = new Ground(new(upcomingTilePosition, STARTING_GRASS_CELL), lastGround.GetNextGrassType());
-                grounds.Add(newGround);
-                InsertGroundTile(newGround);
-            }
-        }
-        else if (userDirection < 0 /* left */)
-        {
-            var cameraPosition = Camera.main.transform.position;
-            var upcomingTilePosition = (int)cameraPosition.x - SHOWING_CELLS;
-            if (!grounds.Any(tile => tile.Position.x == upcomingTilePosition))
-            {
-                var lastGround = grounds.FirstOrDefault(tile => tile.Position.x == upcomingTilePosition + 1);
-                var newGround = new Ground(new(upcomingTilePosition, STARTING_GRASS_CELL), lastGround.GetPreviousGrassType());
-                grounds.Add(newGround);
-                InsertGroundTile(newGround);
+                SetGroundTile(CreateNewGroundTile(upcomingTilePosition, positionAux));
+                SetWallTile(CreateNewWallTile(upcomingTilePosition));
             }
         }
     }
@@ -60,35 +53,50 @@ public class CozyController : MonoBehaviour
         var lastGrassType = GrassType.First;
         for (int cell = SHOWING_CELLS * -1; cell < SHOWING_CELLS; cell++)
         {
-            var ground = new Ground(new(cell, STARTING_GRASS_CELL), lastGrassType);
+            var ground = new Ground(cell, lastGrassType);
             grounds.Add(ground);
             lastGrassType = ground.GetNextGrassType();
         }
 
         foreach (var ground in grounds)
-            InsertGroundTile(ground);
+            SetGroundTile(ground);
     }
 
     private void InitializeWall()
     {
-        const int WALL_HEIGHT = 1;
-        const int STARTING_WALL_CELL = 0;
-
         for (int cell = SHOWING_CELLS * -1; cell < SHOWING_CELLS; cell++)
-            walls.Add(new(STARTING_WALL_CELL, cell, WALL_HEIGHT));
+            walls.Add(new(cell));
 
         foreach (var wall in walls)
-        {
-            wallMap.SetTile(wall.TopPosition, MainAssets.GetWallBlockTop());
-            foreach (var blockPosition in wall.BlockPositions)
-                wallMap.SetTile(blockPosition, MainAssets.GetWallBlock());
-        }
+            SetWallTile(wall);
     }
 
-    private void InsertGroundTile(Ground ground)
+    private Ground CreateNewGroundTile(int upcomingTilePosition, int positionAux)
+    {
+        var lastGround = grounds.FirstOrDefault(tile => tile.Position.x == upcomingTilePosition + positionAux);
+        var newGround = new Ground(upcomingTilePosition, lastGround.GetPreviousGrassType());
+        grounds.Add(newGround);
+        return newGround;
+    }
+
+    private void SetGroundTile(Ground ground)
     {
         grassMap.SetTile(ground.Position, MainAssets.GetGrassLeaf(ground.GrassType));
         foreach (var underground in ground.Underground)
             groundMap.SetTile(underground, MainAssets.GetGrassBlock());
+    }
+
+    private Wall CreateNewWallTile(int upcomingTilePosition)
+    {
+        var newWall = new Wall(upcomingTilePosition);
+        walls.Add(newWall);
+        return newWall;
+    }
+
+    private void SetWallTile(Wall wall)
+    {
+        wallMap.SetTile(wall.TopPosition, MainAssets.GetWallBlockTop());
+        foreach (var blockPosition in wall.BlockPositions)
+            wallMap.SetTile(blockPosition, MainAssets.GetWallBlock());
     }
 }

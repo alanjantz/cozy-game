@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class Ground
 {
-    public const int GROUND_HEIGHT = 4;
+    public const int GROUND_HEIGHT = 8;
+    public const int STARTING_GRASS_CELL = 0;
     public const int STARTING_GROUND_CELL = -1;
 
     public Vector3Int Position { get; private set; }
     public GrassType GrassType { get; private set; }
     public List<Vector3Int> Underground { get; } = new();
 
-    public Ground(Vector3Int position, GrassType grassType)
+    public Ground(int cell, GrassType grassType)
     {
-        Position = position;
+        Position = new(cell, STARTING_GRASS_CELL);
         GrassType = grassType;
 
         CreateUnderground();

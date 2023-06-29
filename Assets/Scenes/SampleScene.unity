@@ -347,7 +347,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 917289727
-  m_SortingLayer: -1
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -2954,7 +2954,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -875505257
-  m_SortingLayer: 1
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -3960,8 +3960,8 @@ GameObject:
   - component: {fileID: 2103218936}
   - component: {fileID: 2103218938}
   - component: {fileID: 2103218937}
-  - component: {fileID: 2103218939}
   - component: {fileID: 2103218940}
+  - component: {fileID: 2103218941}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4108,18 +4108,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9322566, y: 1.4038832}
   m_EdgeRadius: 0
---- !u!114 &2103218939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2103218934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22eba9f2d9d32eb499884ec2177f937a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &2103218940
 Animator:
   serializedVersion: 5
@@ -4141,3 +4129,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2103218941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103218934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02d9da5ce2c242c4badb3c6b2bafbf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeen: 7
+  jumpForce: 14
