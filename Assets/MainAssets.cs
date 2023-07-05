@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,12 +9,13 @@ public class MainAssets : MonoBehaviour
     public Tile grassBlock;
     public Tile wallBlock;
     public Tile wallBlockTop;
+    public Transform[] trees;
 
     public static MainAssets Instance => _instance;
 
     public static TileBase GetGrassLeaf(GrassType grassType)
     {
-        if (Enum.IsDefined(typeof(GrassType), grassType))
+        if (System.Enum.IsDefined(typeof(GrassType), grassType))
             return Instance.grassLeaves[(int)grassType];
 
         return null;
@@ -24,6 +24,14 @@ public class MainAssets : MonoBehaviour
 
     public static TileBase GetWallBlock() => Instance.wallBlock;
     public static TileBase GetWallBlockTop() => Instance.wallBlockTop;
+
+    public static Transform GetTree(TreeType treeType)
+    {
+        if (System.Enum.IsDefined(typeof(TreeType), treeType))
+            return Instance.trees[(int)treeType];
+
+        return null;
+    }
 
     private void Awake()
     {

@@ -9,6 +9,7 @@ public class CozyController : MonoBehaviour
 
     private readonly List<Ground> grounds = new();
     private readonly List<Wall> walls = new();
+    private readonly Dictionary<int, Transform> trees = new();
 
     public Tilemap groundMap;
     public Tilemap grassMap;
@@ -21,6 +22,7 @@ public class CozyController : MonoBehaviour
         groundMap.GetComponent<TilemapCollider2D>().usedByComposite = true;
         InitializeGround();
         InitializeWall();
+        InitializeTrees();
     }
 
     private void Update()
@@ -45,9 +47,12 @@ public class CozyController : MonoBehaviour
                 SetGroundTile(CreateNewGroundTile(upcomingTilePosition, positionAux));
                 SetWallTile(CreateNewWallTile(upcomingTilePosition));
             }
+
+            SetTree(upcomingTilePosition);
         }
     }
 
+    #region Ground
     private void InitializeGround()
     {
         var lastGrassType = GrassType.First;
@@ -60,15 +65,6 @@ public class CozyController : MonoBehaviour
 
         foreach (var ground in grounds)
             SetGroundTile(ground);
-    }
-
-    private void InitializeWall()
-    {
-        for (int cell = SHOWING_CELLS * -1; cell < SHOWING_CELLS; cell++)
-            walls.Add(new(cell));
-
-        foreach (var wall in walls)
-            SetWallTile(wall);
     }
 
     private Ground CreateNewGroundTile(int upcomingTilePosition, int positionAux)
@@ -85,6 +81,17 @@ public class CozyController : MonoBehaviour
         foreach (var underground in ground.Underground)
             groundMap.SetTile(underground, MainAssets.GetGrassBlock());
     }
+    #endregion Ground
+
+    #region Wall
+    private void InitializeWall()
+    {
+        for (int cell = SHOWING_CELLS * -1; cell < SHOWING_CELLS; cell++)
+            walls.Add(new(cell));
+
+        foreach (var wall in walls)
+            SetWallTile(wall);
+    }
 
     private Wall CreateNewWallTile(int upcomingTilePosition)
     {
@@ -99,4 +106,34 @@ public class CozyController : MonoBehaviour
         foreach (var blockPosition in wall.BlockPositions)
             wallMap.SetTile(blockPosition, MainAssets.GetWallBlock());
     }
+    #endregion Wall
+
+    #region Tree
+    private void InitializeTrees()
+    {
+        int startingTrees = 8;
+
+        for (int i = 0, position = -SHOWING_CELLS; i < startingTrees; i++)
+        {
+            trees[position] = CreateTree(position).Transform;
+            position += Random.Range(8, 10);
+        }
+    }
+
+    private void SetTree(int upcomingTilePosition)
+    {
+        if (!trees.Keys.Any(treePosition => upcomingTilePosition - 8 <= treePosition && upcomingTilePosition + 8 >= treePosition))
+        {
+            var position = upcomingTilePosition + Random.Range(0, 2);
+            trees[position] = CreateTree(position).Transform;
+        }
+    }
+
+    private Tree CreateTree(int position)
+    {
+        var tree = new Tree((TreeType)Random.Range(0, MainAssets.Instance.trees.Length), position);
+        tree.Transform.parent = treesMap.transform;
+        return tree;
+    }
+    #endregion Tree
 }

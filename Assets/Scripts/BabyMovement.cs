@@ -7,7 +7,6 @@ public class BabyMovement : MonoBehaviour
     private Animator animator;
 
     public float moveSpeed = 7f;
-    public float jumpForce = 14f;
 
     private void Start()
     {
