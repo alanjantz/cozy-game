@@ -51,7 +51,8 @@ MonoBehaviour:
   grassBlock: {fileID: 11400000, guid: eab1135f474132343b13dab82f5accd6, type: 2}
   wallBlock: {fileID: 11400000, guid: e00ee425ae7ee1c4cbe38d82f37ace2f, type: 2}
   wallBlockTop: {fileID: 11400000, guid: c0cefc2c72b92244bb052848c744af7c, type: 2}
-  Trees:
+  trees:
   - {fileID: 9145979227980901920, guid: 8dd8fa4da49317e40852b893cf5db0f3, type: 3}
   - {fileID: 1268518620418402680, guid: 00d2fd493cc0b2c4ca05ed6f6b36fdde, type: 3}
   - {fileID: 8148398725608935728, guid: 2973d5d99b6dcb24d89557342972c627, type: 3}
+  landspace: {fileID: 3915654644607721379, guid: 96b3f3cf35874bf4091faf4e92397e3c, type: 3}

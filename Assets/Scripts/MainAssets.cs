@@ -10,6 +10,7 @@ public class MainAssets : MonoBehaviour
     public Tile wallBlock;
     public Tile wallBlockTop;
     public Transform[] trees;
+    public Transform landspace;
 
     public static MainAssets Instance => _instance;
 
@@ -32,6 +33,8 @@ public class MainAssets : MonoBehaviour
 
         return null;
     }
+
+    public static Transform GetLandspace() => Instance.landspace;
 
     private void Awake()
     {

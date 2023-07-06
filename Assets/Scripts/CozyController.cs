@@ -9,7 +9,8 @@ public class CozyController : MonoBehaviour
 
     private readonly List<Ground> grounds = new();
     private readonly List<Wall> walls = new();
-    private readonly Dictionary<int, Transform> trees = new();
+    private readonly Dictionary<int, Tree> trees = new();
+    private readonly Dictionary<int, Landscape> landscapes = new();
 
     public Tilemap groundMap;
     public Tilemap grassMap;
@@ -23,6 +24,7 @@ public class CozyController : MonoBehaviour
         InitializeGround();
         InitializeWall();
         InitializeTrees();
+        InitializeLandscape();
     }
 
     private void Update()
@@ -48,7 +50,8 @@ public class CozyController : MonoBehaviour
                 SetWallTile(CreateNewWallTile(upcomingTilePosition));
             }
 
-            SetTree(upcomingTilePosition);
+            ControlTrees(upcomingTilePosition);
+            ControlLandscape(upcomingTilePosition);
         }
     }
 
@@ -115,17 +118,34 @@ public class CozyController : MonoBehaviour
 
         for (int i = 0, position = -SHOWING_CELLS; i < startingTrees; i++)
         {
-            trees[position] = CreateTree(position).Transform;
+            trees[position] = CreateTree(position);
             position += Random.Range(8, 10);
         }
     }
 
-    private void SetTree(int upcomingTilePosition)
+    private void ControlTrees(int upcomingTilePosition)
     {
         if (!trees.Keys.Any(treePosition => upcomingTilePosition - 8 <= treePosition && upcomingTilePosition + 8 >= treePosition))
         {
             var position = upcomingTilePosition + Random.Range(0, 2);
-            trees[position] = CreateTree(position).Transform;
+            trees[position] = CreateTree(position);
+        }
+        else
+        {
+            foreach (var treePosition in trees.Keys.Where(treePosition => upcomingTilePosition - 8 <= treePosition && upcomingTilePosition + 8 >= treePosition))
+            {
+                var currentTree = trees[treePosition];
+                if (!currentTree.Active)
+                {
+                    currentTree.Instantiate();
+                    currentTree.Transform.parent = treesMap.transform;
+                }
+            }
+        }
+
+        foreach (var treePosition in trees.Keys.Where(treePosition => treePosition < upcomingTilePosition - SHOWING_CELLS * 2 || treePosition > upcomingTilePosition + SHOWING_CELLS * 2))
+        {
+            trees[treePosition].Destroy();
         }
     }
 
@@ -136,4 +156,52 @@ public class CozyController : MonoBehaviour
         return tree;
     }
     #endregion Tree
+
+    #region Lanscape
+
+    private void InitializeLandscape()
+    {
+        int startingLandscape = 8;
+
+        for (int i = 0, position = -SHOWING_CELLS; i < startingLandscape; i++)
+        {
+            landscapes[position] = CreateLandscape(position);
+            position += Landscape.WIDTH;
+        }
+    }
+
+    private void ControlLandscape(int upcomingTilePosition)
+    {
+        if (!landscapes.Keys.Any(landscapePosition => upcomingTilePosition + Landscape.WIDTH > landscapePosition && upcomingTilePosition - Landscape.WIDTH < landscapePosition))
+        {
+            var position = upcomingTilePosition;
+            landscapes[position] = CreateLandscape(position);
+        }
+        else
+        {
+            foreach (var landscapePosition in landscapes.Keys.Where(landscapePosition => upcomingTilePosition + Landscape.WIDTH > landscapePosition && upcomingTilePosition - Landscape.WIDTH < landscapePosition))
+            {
+                var landscapesTree = landscapes[landscapePosition];
+                if (!landscapesTree.Active)
+                {
+                    landscapesTree.Instantiate();
+                    landscapesTree.Transform.parent = treesMap.transform;
+                }
+            }
+        }
+
+        foreach (var landscapePosition in landscapes.Keys.Where(landscapePosition => landscapePosition < upcomingTilePosition - SHOWING_CELLS * 2 || landscapePosition > upcomingTilePosition + SHOWING_CELLS * 2))
+        {
+            landscapes[landscapePosition].Destroy();
+        }
+    }
+
+    private Landscape CreateLandscape(int position)
+    {
+        var landscape = new Landscape(position);
+        landscape.Transform.parent = scenaryMap.transform;
+        return landscape;
+    }
+
+    #endregion Landscape
 }
