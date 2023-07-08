@@ -9,11 +9,13 @@ public class CozyController : MonoBehaviour
 
     private readonly List<Ground> grounds = new();
     private readonly List<Wall> walls = new();
+    private readonly List<Flower> flowers = new();
     private readonly Dictionary<int, Tree> trees = new();
     private readonly Dictionary<int, Landscape> landscapes = new();
 
     public Tilemap groundMap;
     public Tilemap grassMap;
+    public Tilemap flowerMap;
     public Tilemap wallMap;
     public Tilemap treesMap;
     public Tilemap scenaryMap;
@@ -23,6 +25,7 @@ public class CozyController : MonoBehaviour
         groundMap.GetComponent<TilemapCollider2D>().usedByComposite = true;
         InitializeGround();
         InitializeWall();
+        InitializeFlowers();
         InitializeTrees();
         InitializeLandscape();
     }
@@ -42,12 +45,14 @@ public class CozyController : MonoBehaviour
                 upcomingTilePosition = cameraPosition - SHOWING_CELLS;
 
             shouldInsertNewTile = !grounds.Any(tile => tile.Position.x == upcomingTilePosition)
-                               && !walls.Any(tile => tile.TopPosition.x == upcomingTilePosition);
+                               && !walls.Any(tile => tile.TopPosition.x == upcomingTilePosition)
+                               && !flowers.Any(tile => tile.Position.x == upcomingTilePosition);
 
             if (shouldInsertNewTile)
             {
                 SetGroundTile(CreateNewGroundTile(upcomingTilePosition, positionAux));
                 SetWallTile(CreateNewWallTile(upcomingTilePosition));
+                SetFlowerTile(CreateNewFlowerTile(upcomingTilePosition));
             }
 
             ControlTrees(upcomingTilePosition);
@@ -110,6 +115,28 @@ public class CozyController : MonoBehaviour
             wallMap.SetTile(blockPosition, MainAssets.GetWallBlock());
     }
     #endregion Wall
+
+    #region Flower
+    private void InitializeFlowers()
+    {
+        for (int cell = SHOWING_CELLS * -1; cell < SHOWING_CELLS; cell++)
+            flowers.Add(CreateNewFlowerTile(cell));
+
+        foreach (var flower in flowers)
+            SetFlowerTile(flower);
+    }
+
+    private Flower CreateNewFlowerTile(int upcomingTilePosition)
+    {
+        return new Flower(upcomingTilePosition, (FlowerType)Random.Range(0, MainAssets.Instance.flowers.Length));
+    }
+
+    private void SetFlowerTile(Flower flower)
+    {
+        if (Random.value <= 0.75f)
+            flowerMap.SetTile(flower.Position, MainAssets.GetFlower(flower.Type));
+    }
+    #endregion Flower
 
     #region Tree
     private void InitializeTrees()
@@ -204,4 +231,5 @@ public class CozyController : MonoBehaviour
     }
 
     #endregion Landscape
+
 }

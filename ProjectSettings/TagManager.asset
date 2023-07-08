@@ -50,6 +50,9 @@ TagManager:
   - name: Wall
     uniqueID: 1979573129
     locked: 0
+  - name: Flowers
+    uniqueID: 549516933
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

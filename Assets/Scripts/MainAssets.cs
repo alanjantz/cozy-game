@@ -11,6 +11,7 @@ public class MainAssets : MonoBehaviour
     public Tile wallBlockTop;
     public Transform[] trees;
     public Transform landspace;
+    public Tile[] flowers;
 
     public static MainAssets Instance => _instance;
 
@@ -35,6 +36,14 @@ public class MainAssets : MonoBehaviour
     }
 
     public static Transform GetLandspace() => Instance.landspace;
+
+    internal static TileBase GetFlower(FlowerType type)
+    {
+        if (System.Enum.IsDefined(typeof(FlowerType), type))
+            return Instance.flowers[(int)type];
+
+        return null;
+    }
 
     private void Awake()
     {
