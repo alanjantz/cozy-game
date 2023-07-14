@@ -12,6 +12,9 @@ public class MainAssets : MonoBehaviour
     public Transform[] trees;
     public Transform landspace;
     public Tile[] flowers;
+    public Transform bench;
+    public Transform[] clouds;
+    public Transform[] bushes;
 
     public static MainAssets Instance => _instance;
 
@@ -37,13 +40,23 @@ public class MainAssets : MonoBehaviour
 
     public static Transform GetLandspace() => Instance.landspace;
 
-    internal static TileBase GetFlower(FlowerType type)
+    public static TileBase GetFlower(FlowerType type)
     {
         if (System.Enum.IsDefined(typeof(FlowerType), type))
             return Instance.flowers[(int)type];
 
         return null;
     }
+
+    public static Transform GetCloud(CloudType type)
+    {
+        if (System.Enum.IsDefined(typeof(CloudType), type))
+            return Instance.clouds[(int)type];
+
+        return null;
+    }
+
+    public static Transform GetBench() => Instance.bench;
 
     private void Awake()
     {

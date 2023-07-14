@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class CozyController : MonoBehaviour
+public class ScenaryController : MonoBehaviour
 {
     private const int SHOWING_CELLS = 30;
 
@@ -12,13 +12,15 @@ public class CozyController : MonoBehaviour
     private readonly List<Flower> flowers = new();
     private readonly Dictionary<int, Tree> trees = new();
     private readonly Dictionary<int, Landscape> landscapes = new();
+    private readonly Dictionary<int, Cloud> clouds = new();
 
     public Tilemap groundMap;
     public Tilemap grassMap;
     public Tilemap flowerMap;
     public Tilemap wallMap;
-    public Tilemap treesMap;
-    public Tilemap scenaryMap;
+    public Transform treesContainer;
+    public Transform scenaryContainer;
+    public Transform objectContainer;
 
     private void Start()
     {
@@ -28,14 +30,15 @@ public class CozyController : MonoBehaviour
         InitializeFlowers();
         InitializeTrees();
         InitializeLandscape();
+        InitializeClouds();
     }
 
     private void Update()
     {
+        var cameraPosition = (int)Camera.main.transform.position.x;
+        var upcomingTilePosition = cameraPosition + SHOWING_CELLS;
         if (!InputUtils.IsIdle())
         {
-            var cameraPosition = (int)Camera.main.transform.position.x;
-            var upcomingTilePosition = cameraPosition + SHOWING_CELLS;
             var shouldInsertNewTile = false;
             int positionAux = 1;
 
@@ -58,6 +61,8 @@ public class CozyController : MonoBehaviour
             ControlTrees(upcomingTilePosition);
             ControlLandscape(upcomingTilePosition);
         }
+
+        ControlClouds(upcomingTilePosition * -1);
     }
 
     #region Ground
@@ -165,7 +170,7 @@ public class CozyController : MonoBehaviour
                 if (!currentTree.Active)
                 {
                     currentTree.Instantiate();
-                    currentTree.Transform.parent = treesMap.transform;
+                    currentTree.Transform.parent = treesContainer.transform;
                 }
             }
         }
@@ -179,7 +184,7 @@ public class CozyController : MonoBehaviour
     private Tree CreateTree(int position)
     {
         var tree = new Tree((TreeType)Random.Range(0, MainAssets.Instance.trees.Length), position);
-        tree.Transform.parent = treesMap.transform;
+        tree.Transform.parent = treesContainer.transform;
         return tree;
     }
     #endregion Tree
@@ -212,7 +217,7 @@ public class CozyController : MonoBehaviour
                 if (!landscapesTree.Active)
                 {
                     landscapesTree.Instantiate();
-                    landscapesTree.Transform.parent = treesMap.transform;
+                    landscapesTree.Transform.parent = treesContainer.transform;
                 }
             }
         }
@@ -226,10 +231,34 @@ public class CozyController : MonoBehaviour
     private Landscape CreateLandscape(int position)
     {
         var landscape = new Landscape(position);
-        landscape.Transform.parent = scenaryMap.transform;
+        landscape.Transform.parent = scenaryContainer.transform;
         return landscape;
     }
 
     #endregion Landscape
 
+    #region Cloud
+    private void InitializeClouds()
+    {
+        int startingClouds = 4;
+
+        for (int i = 0, position = -SHOWING_CELLS; i < startingClouds; i++)
+        {
+            clouds[position] = CreateCloud(position);
+            position += Random.Range(8, 10);
+        }
+    }
+
+    private void ControlClouds(int upcomingTilePosition)
+    {
+        // not yet
+    }
+
+    private Cloud CreateCloud(int position)
+    {
+        var cloud = new Cloud((CloudType)Random.Range(0, MainAssets.Instance.clouds.Length), position);
+        cloud.Transform.parent = scenaryContainer.transform;
+        return cloud;
+    }
+    #endregion Cloud
 }

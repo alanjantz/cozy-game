@@ -1,6 +1,6 @@
 ﻿public enum FlowerType
 {
-    Yelow = 0,
+    Yelow,
     Pink,
     Salmon,
     Blue,

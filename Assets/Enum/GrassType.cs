@@ -1,6 +1,6 @@
 ﻿public enum GrassType
 {
-    First = 0,
+    First,
     Second,
     Third,
 }

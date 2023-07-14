@@ -63,3 +63,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 05fdac9c0709cab4f9665d3f23f2b997, type: 2}
   - {fileID: 11400000, guid: d88c794a929fe6d4e9c29b2a2cb0cc36, type: 2}
   - {fileID: 11400000, guid: 652498feb69d2244e92911d26c099279, type: 2}
+  bench: {fileID: 4006823625105147159, guid: 806d314bbe81b6f489465a1f8c279524, type: 3}
+  clouds:
+  - {fileID: 2150985708203988784, guid: fe91ef5594602044fa7ac8a28e2d550e, type: 3}
+  - {fileID: 2587570188131128433, guid: dada52487b52e5e4b94eea54373eb25b, type: 3}
+  - {fileID: 3227144116702578441, guid: 29f989e184d67aa44a26ec8db7fa9db1, type: 3}
+  - {fileID: 4490860439414162121, guid: ccc38c3b68d19124583fcb394782dc44, type: 3}
+  bushes:
+  - {fileID: 3385544877617146215, guid: 71918a2500ddf8742b8a6b9195879e38, type: 3}
+  - {fileID: 5613231294220100761, guid: fe150de2309996e4b8e0241d87cb8258, type: 3}
