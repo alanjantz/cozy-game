@@ -10,7 +10,7 @@ public class Tree
     public Tree(TreeType treeType, int position)
     {
         Type = treeType;
-        Position = new Vector3(position, Random.Range(5.5f, 6.5f));
+        Position = new Vector3(position, GetHeighByType());
         Instantiate();
     }
 
@@ -31,5 +31,16 @@ public class Tree
             Transform = null;
             Active = false;
         }
+    }
+
+    private float GetHeighByType()
+    {
+        return Type switch
+        {
+            TreeType.First => 6.9f,
+            TreeType.Second => 8.45f,
+            TreeType.Third => 6.5f,
+            _ => 2f,
+        };
     }
 }

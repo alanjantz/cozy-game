@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="View" style="flex-grow: 1; background-color: rgb(215, 195, 191);">
+        <ui:VisualElement name="Title" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: none; align-items: center; align-self: center; justify-content: center;">
+            <ui:VisualElement name="Image" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Images/Utils/Title.png?fileID=2800000&amp;guid=995530acaaf014f43b8c1bda047cd7b7&amp;type=3#Title&apos;); min-height: 196px; min-width: auto; width: 500px; height: 196px; max-height: 196px; flex-direction: column;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Footer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: auto; max-height: 150px; min-height: 150px; justify-content: center; align-self: center; align-items: center; width: 100%; bottom: 0;">
+            <ui:Label tabindex="-1" text="Precione espaço para começar" display-tooltip-when-elided="true" name="ActionMessage" style="-unity-font: resource(&apos;David Sans&apos;); -unity-font-definition: initial; color: rgb(63, 72, 95); -unity-text-align: middle-center;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
