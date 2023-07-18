@@ -15,6 +15,7 @@ public class MainAssets : MonoBehaviour
     public Transform bench;
     public Transform[] clouds;
     public Transform[] bushes;
+    public AudioClip[] environmentMusic;
 
     public static MainAssets Instance => _instance;
 

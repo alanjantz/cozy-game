@@ -13,6 +13,7 @@ public class ScenaryController : MonoBehaviour
     private readonly Dictionary<int, Tree> trees = new();
     private readonly Dictionary<int, Landscape> landscapes = new();
     private readonly Dictionary<int, Cloud> clouds = new();
+    private readonly Dictionary<int, Gadget> gadgets = new();
 
     public Tilemap groundMap;
     public Tilemap grassMap;
@@ -20,7 +21,7 @@ public class ScenaryController : MonoBehaviour
     public Tilemap wallMap;
     public Transform treesContainer;
     public Transform scenaryContainer;
-    public Transform objectContainer;
+    public Transform gadgetContainer;
 
     private void Start()
     {
