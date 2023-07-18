@@ -62,7 +62,7 @@ public class ScenaryController : MonoBehaviour
             ControlLandscape(upcomingTilePosition);
         }
 
-        ControlClouds(upcomingTilePosition * -1);
+        ControlClouds(upcomingTilePosition);
     }
 
     #region Ground
@@ -240,7 +240,7 @@ public class ScenaryController : MonoBehaviour
     #region Cloud
     private void InitializeClouds()
     {
-        int startingClouds = 4;
+        int startingClouds = 8;
 
         for (int i = 0, position = -SHOWING_CELLS; i < startingClouds; i++)
         {
@@ -251,7 +251,27 @@ public class ScenaryController : MonoBehaviour
 
     private void ControlClouds(int upcomingTilePosition)
     {
-        // not yet
+        if (!clouds.Keys.Any(cloudPosition => upcomingTilePosition - 8 <= cloudPosition && upcomingTilePosition + 8 >= cloudPosition))
+        {
+            clouds[upcomingTilePosition] = CreateCloud(upcomingTilePosition);
+        }
+        else
+        {
+            foreach (var cloudPosition in clouds.Keys.Where(cloudPosition => upcomingTilePosition - 8 <= cloudPosition && upcomingTilePosition + 8 >= cloudPosition))
+            {
+                var currentCloud = clouds[cloudPosition];
+                if (!currentCloud.Active)
+                {
+                    currentCloud.Instantiate();
+                    currentCloud.Transform.parent = scenaryContainer.transform;
+                }
+            }
+        }
+
+        foreach (var cloudPosition in clouds.Keys.Where(cloudPosition => cloudPosition < upcomingTilePosition - SHOWING_CELLS * 2 || cloudPosition > upcomingTilePosition + SHOWING_CELLS * 2))
+        {
+            clouds[cloudPosition].Destroy();
+        }
     }
 
     private Cloud CreateCloud(int position)
