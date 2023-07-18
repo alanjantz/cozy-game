@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="View" style="flex-grow: 1; background-color: rgb(215, 195, 191); align-self: stretch; justify-content: flex-end; align-items: flex-end;">
-        <ui:Label tabindex="-1" text="Carregando..." display-tooltip-when-elided="true" name="LoadingText" style="justify-content: space-between; -unity-font: resource(&apos;Cursive&apos;); -unity-font-definition: initial; color: rgb(164, 137, 131); padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; font-size: 20%;" />
+        <ui:Label tabindex="-1" text="Carregando..." display-tooltip-when-elided="true" name="LoadingText" style="justify-content: space-between; -unity-font: resource(&apos;Fonts/Cursive&apos;); -unity-font-definition: initial; color: rgb(164, 137, 131); padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; font-size: 20%;" />
     </ui:VisualElement>
 </ui:UXML>
