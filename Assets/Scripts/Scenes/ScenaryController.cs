@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class ScenaryController : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class ScenaryController : MonoBehaviour
     private readonly Dictionary<int, Landscape> landscapes = new();
     private readonly Dictionary<int, Cloud> clouds = new();
     private readonly Dictionary<int, Gadget> gadgets = new();
+    private readonly Dictionary<int, string> storylines = new();
+
+    private Label TextLabel;
 
     public Tilemap groundMap;
     public Tilemap grassMap;
@@ -22,16 +26,34 @@ public class ScenaryController : MonoBehaviour
     public Transform treesContainer;
     public Transform scenaryContainer;
     public Transform gadgetContainer;
+    public UIDocument textContainer;
 
     private void Start()
     {
         groundMap.GetComponent<TilemapCollider2D>().usedByComposite = true;
+        TextLabel = textContainer.rootVisualElement.Q<Label>("cozy-text");
         InitializeGround();
         InitializeWall();
         InitializeFlowers();
         InitializeTrees();
         InitializeLandscape();
         InitializeClouds();
+
+        storylines[10] = "Olá";
+        storylines[20] = "Nos últimos anos, você me mostrou que presentar pode ter outros significados";
+        storylines[30] = "Não é o simples ato de dar um presente";
+        storylines[40] = "Não é apenas entregar alguma coisa material";
+        storylines[50] = "Por trás desta ação, existem sentimentos, razões e expectativas";
+        storylines[60] = "Além disso, cada presente tem uma memória";
+        storylines[70] = "E no fim, acho que é isso que importa...";
+        storylines[80] = "Comecei a me importar mais com presente quando me dei conta disso";
+        storylines[90] = "Por isso, quero que este presente faça parte de suas memórias especiais";
+        storylines[100] = "E que você lembre dele quando for preciso";
+        storylines[110] = "Pois foi pensando em alguém especial para mim";
+        storylines[120] = "Que fiz este presente especial para você.";
+        storylines[130] = "Feliz aniversário";
+        storylines[140] = "Amo você de montão";
+        storylines[150] = "(*^ - ^*)";
     }
 
     private void Update()
@@ -64,6 +86,8 @@ public class ScenaryController : MonoBehaviour
         }
 
         ControlClouds(upcomingTilePosition);
+
+        ControlText(cameraPosition);
     }
 
     #region Ground
@@ -282,4 +306,29 @@ public class ScenaryController : MonoBehaviour
         return cloud;
     }
     #endregion Cloud
+
+    #region Text
+
+    private void ControlText(int cameraPosition)
+    {
+        bool filterPositions(int position)
+            => position >= cameraPosition - 3 && position <= cameraPosition + 3;
+
+        if (storylines.Keys.Any(position => filterPositions(position)))
+        {
+            var position = storylines.Keys.FirstOrDefault(position => (filterPositions(position)));
+            if (storylines.ContainsKey(position))
+            {
+                TextLabel.visible = true;
+                TextLabel.text = storylines[position];
+            }
+        }
+        else
+        {
+            TextLabel.visible = false;
+            TextLabel.text = null;
+        }
+    }
+
+    #endregion Text
 }

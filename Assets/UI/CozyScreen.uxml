@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Stylesheets/CozySceneStylesheet.uss?fileID=7433441132597879392&amp;guid=ce0229e135e512b46b3148b4a1a2e1e3&amp;type=3#CozySceneStylesheet" />
+    <ui:VisualElement name="view" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: center; justify-content: flex-end;">
+        <ui:VisualElement name="footer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 250px; min-height: 250px; max-height: 250px; bottom: 0; justify-content: center; color: rgb(164, 137, 131);">
+            <ui:Label tabindex="-1" text="Texto" display-tooltip-when-elided="false" name="cozy-text" enable-rich-text="true" class="footer-text" style="-unity-font: resource(&apos;Fonts/David Sans&apos;); -unity-font-definition: initial;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -6,7 +6,7 @@ public class BabyMovement : MonoBehaviour
     private SpriteRenderer rbSprite;
     private Animator animator;
 
-    public float moveSpeed = 7f;
+    public float moveSpeed = 5f;
 
     private void Start()
     {
