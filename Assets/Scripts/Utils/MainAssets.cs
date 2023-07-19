@@ -16,6 +16,7 @@ public class MainAssets : MonoBehaviour
     public Transform[] clouds;
     public Transform[] bushes;
     public AudioClip[] environmentMusic;
+    public Transform signPost;
 
     public static MainAssets Instance => _instance;
 
@@ -58,6 +59,8 @@ public class MainAssets : MonoBehaviour
     }
 
     public static Transform GetBench() => Instance.bench;
+
+    public static Transform GetSignPost() => Instance.signPost;
 
     private void Awake()
     {

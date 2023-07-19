@@ -746,7 +746,7 @@ MonoBehaviour:
   wallMap: {fileID: 780440237}
   treesContainer: {fileID: 501490777}
   scenaryContainer: {fileID: 1394143224}
-  gadgetContainer: {fileID: 0}
+  gadgetContainer: {fileID: 1511963812}
   textContainer: {fileID: 1741826799}
 --- !u!4 &1219601257
 Transform:
@@ -858,7 +858,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1511963812}
   m_Layer: 0
-  m_Name: Objects
+  m_Name: Gadgets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

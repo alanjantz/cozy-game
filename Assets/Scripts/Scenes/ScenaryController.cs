@@ -15,7 +15,7 @@ public class ScenaryController : MonoBehaviour
     private readonly Dictionary<int, Landscape> landscapes = new();
     private readonly Dictionary<int, Cloud> clouds = new();
     private readonly Dictionary<int, Gadget> gadgets = new();
-    private readonly Dictionary<int, string> storylines = new();
+    private readonly List<Storyline> storylines = new();
 
     private Label TextLabel;
 
@@ -38,22 +38,23 @@ public class ScenaryController : MonoBehaviour
         InitializeTrees();
         InitializeLandscape();
         InitializeClouds();
+        InitializeGadgets();
 
-        storylines[10] = "Olá";
-        storylines[20] = "Nos últimos anos, você me mostrou que presentar pode ter outros significados";
-        storylines[30] = "Não é o simples ato de dar um presente";
-        storylines[40] = "Não é apenas entregar alguma coisa material";
-        storylines[50] = "Por trás desta ação, existem sentimentos, razões e expectativas";
-        storylines[60] = "Além disso, cada presente tem uma memória";
-        storylines[70] = "E no fim, acho que é isso que importa...";
-        storylines[80] = "Comecei a me importar mais com presente quando me dei conta disso";
-        storylines[90] = "Por isso, quero que este presente faça parte de suas memórias especiais";
-        storylines[100] = "E que você lembre dele quando for preciso";
-        storylines[110] = "Pois foi pensando em alguém especial para mim";
-        storylines[120] = "Que fiz este presente especial para você.";
-        storylines[130] = "Feliz aniversário";
-        storylines[140] = "Amo você de montão";
-        storylines[150] = "(*^ - ^*)";
+        storylines.Add(new(10, "Olá"));
+        storylines.Add(new(20, "Nos últimos anos, você me mostrou que presentar pode ter outros significados", 5));
+        storylines.Add(new(30, "Não é o simples ato de dar um presente"));
+        storylines.Add(new(40, "Não é apenas entregar alguma coisa material"));
+        storylines.Add(new(50, "Por trás desta ação, existem sentimentos, razões e expectativas"));
+        storylines.Add(new(60, "Além disso, cada presente tem uma memória"));
+        storylines.Add(new(70, "E no fim, acho que é isso que importa..."));
+        storylines.Add(new(80, "Comecei a me importar mais com presente quando me dei conta disso", 5));
+        storylines.Add(new(90, "Por isso, quero que este presente faça parte de suas memórias especiais", 5));
+        storylines.Add(new(100, "E que você lembre dele quando for preciso"));
+        storylines.Add(new(110, "Pois foi pensando em alguém especial para mim"));
+        storylines.Add(new(120, "Que fiz este presente especial para você."));
+        storylines.Add(new(130, "Feliz aniversário"));
+        storylines.Add(new(140, "Amo você de montão"));
+        storylines.Add(new(150, "(*^ - ^*)"));
     }
 
     private void Update()
@@ -307,26 +308,45 @@ public class ScenaryController : MonoBehaviour
     }
     #endregion Cloud
 
+    #region Gadgets
+
+    private void InitializeGadgets()
+    {
+        var signPost = CreateSignPost(-4);
+        gadgets[(int)signPost.Position.x] = signPost;
+    }
+
+    private SignPost CreateSignPost(int position)
+    {
+        var signPost = new SignPost(position);
+        signPost.Transform.parent = gadgetContainer.transform;
+        return signPost;
+    }
+
+    #endregion Gadgets
+
     #region Text
 
+    private Storyline _currentStoryline;
     private void ControlText(int cameraPosition)
     {
-        bool filterPositions(int position)
-            => position >= cameraPosition - 3 && position <= cameraPosition + 3;
+        bool filterStoryline(Storyline storyline)
+            => !storyline.Seen &&
+               storyline.Position >= cameraPosition - storyline.Area &&
+               storyline.Position <= cameraPosition + storyline.Area;
 
-        if (storylines.Keys.Any(position => filterPositions(position)))
+        if (storylines.Any(storyline => filterStoryline(storyline)))
         {
-            var position = storylines.Keys.FirstOrDefault(position => (filterPositions(position)));
-            if (storylines.ContainsKey(position))
-            {
-                TextLabel.visible = true;
-                TextLabel.text = storylines[position];
-            }
+            _currentStoryline = storylines.FirstOrDefault(storyline => (filterStoryline(storyline)));
+            TextLabel.visible = true;
+            TextLabel.text = _currentStoryline.Text;
         }
         else
         {
+            _currentStoryline?.SetSeen();
             TextLabel.visible = false;
             TextLabel.text = null;
+            _currentStoryline = null;
         }
     }
 

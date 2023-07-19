@@ -78,3 +78,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 91f820c11898b6e4882bd836c8c4e753, type: 3}
   - {fileID: 8300000, guid: d227190cd67e95b4c9250cdf23dae34d, type: 3}
   - {fileID: 8300000, guid: 2d6db0da4edfed74092f72177440b215, type: 3}
+  signPost: {fileID: 4814053153838954894, guid: 6c811fd79d63d8749828a6a9c6fc1d17, type: 3}
